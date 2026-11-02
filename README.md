@@ -1,6 +1,6 @@
 ﻿# Praktikum Pemrograman Mobile (Dart & Flutter)
 
-Repositori ini berisi kumpulan tugas dan implementasi modul praktikum mata kuliah **Pemrograman Mobile**, mencakup dasar pemrograman **Dart** hingga pengembangan antarmuka aplikasi mobile menggunakan **Flutter Framework**.
+Repositori ini berisi dokumentasi dan implementasi tugas praktikum mata kuliah **Pemrograman Mobile**, mencakup konsep dasar pemrograman **Dart**, dasar perancangan antarmuka **Flutter**, hingga implementasi **Autentikasi, Routing, Side Menu (Drawer), dan Local Storage**.
 
 ---
 
@@ -10,6 +10,7 @@ Repositori ini berisi kumpulan tugas dan implementasi modul praktikum mata kulia
 | :---: | :--- | :---: | :---: | :---: |
 | **Modul 1** | Struktur Data Queue (Antrian) | Dart SDK | [`queue.dart`](queue.dart) | Selesai |
 | **Modul 2** | Pengenalan dan Desain Framework Flutter | Flutter & Dart | [`belajar/`](belajar/) | Selesai |
+| **Modul 3** | Routes, Side Menu, Login dan Local Storage | Flutter & SharedPreferences | [`belajar/`](belajar/) | Selesai |
 
 ---
 
@@ -65,13 +66,6 @@ void main() {
 }
 ```
 
-#### Rincian Komponen:
-1. **Deklarasi Class & Properti**: `class Queue` dengan properti `List<int> data = []` sebagai wadah penampung data integer.
-2. **Method `enqueue(int nilai)`**: Menggunakan `data.add(nilai)` untuk menempatkan data baru di posisi akhir antrian.
-3. **Method `pop()`**: Memvalidasi kondisi antrian kosong (`data.isEmpty`), kemudian menghapus dan mengembalikan elemen pertama dengan `data.removeAt(0)` (null-safe: `int?`).
-4. **Method `tampilkan()`**: Menampilkan status seluruh elemen antrian ke konsol.
-5. **Fungsi `main()`**: Menjalankan simulasi penambahan data (10, 20, 30), menampilkan isi, mengeluarkan elemen pertama (10), dan menampilkan kondisi akhir.
-
 #### 🖥️ Output Program Modul 1
 ```text
 10 berhasil ditambahkan ke antrian
@@ -89,114 +83,152 @@ Isi antrian: [20, 30]
 ### 📌 Ringkasan Modul
 Modul 2 berfokus pada pengenalan ekosistem framework Flutter, dasar hierarki widget (*Widget Tree*), perancangan tata letak (*layouting*), manajemen formulir (*form input*), navigasi halaman (*routing*), serta pembuatan daftar (*ListView*).
 
-### 📂 Struktur Direktori Proyek Modul 2
+### 📸 Galeri Tangkapan Layar Tampilan Aplikasi (Modul 2)
+
+| No | Latihan / Fitur | File Sumber | Tangkapan Layar Emulator |
+| :---: | :--- | :--- | :---: |
+| 1 | **Hello World** | [`belajar/lib/hello_world.dart`](belajar/lib/hello_world.dart) | <img src="docs/screenshots/01_hello_world.png" width="260"/> |
+| 2 | **Widget Column** | [`belajar/lib/column_widget.dart`](belajar/lib/column_widget.dart) | <img src="docs/screenshots/02_column_widget.png" width="260"/> |
+| 3 | **Widget Row** | [`belajar/lib/row_widget.dart`](belajar/lib/row_widget.dart) | <img src="docs/screenshots/03_row_widget.png" width="260"/> |
+| 4 | **Form Input Produk** | [`belajar/lib/ui/produk_form.dart`](belajar/lib/ui/produk_form.dart) | <img src="docs/screenshots/04_produk_form.png" width="260"/> |
+| 5 | **Detail Produk (Data Passing)** | [`belajar/lib/ui/produk_detail.dart`](belajar/lib/ui/produk_detail.dart) | <img src="docs/screenshots/05_produk_detail.png" width="260"/> |
+| 6 | **List Data Produk (ListView)** | [`belajar/lib/ui/produk_page.dart`](belajar/lib/ui/produk_page.dart) | <img src="docs/screenshots/06_produk_page.png" width="260"/> |
+
+---
+
+## 🔐 MODUL 3: Routes, Side Menu, Login dan Local Storage
+
+### 📌 Ringkasan Modul
+Modul 3 memperluas kemampuan aplikasi dengan mengimplementasikan sistem autentikasi sederhana, penyimpanan persisten sesi pengguna (*Local Storage*) menggunakan package `shared_preferences`, penanganan dialog pop-up (`AlertDialog`), serta menu laci samping (*Side Menu / Drawer*) yang mengintegrasikan perpindahan halaman (*Routing*).
+
+### 📂 Struktur File Modul 3
 ```text
 belajar/
-├── android/            # Konfigurasi platform native Android
-├── ios/                # Konfigurasi platform native iOS
-├── lib/                # Source code utama aplikasi Flutter
-│   ├── ui/
-│   │   ├── produk_detail.dart # Tampilan detail produk dari hasil submit form
-│   │   ├── produk_form.dart   # Formulir input data produk
-│   │   └── produk_page.dart   # Tampilan daftar produk (ListView & Card)
-│   ├── column_widget.dart     # Demonstrasi widget Column
-│   ├── hello_world.dart       # Demonstrasi StatelessWidget dasar Hello World
-│   ├── main.dart              # Entry point utama aplikasi Flutter
-│   └── row_widget.dart        # Demonstrasi widget Row
+├── lib/
+│   ├── about_page.dart  # Halaman informasi aplikasi dengan Sidemenu
+│   ├── home_page.dart   # Halaman beranda yang membaca username dari SharedPreferences
+│   ├── login_page.dart  # Halaman login yang memvalidasi & menyimpan sesi ke SharedPreferences
+│   ├── main.dart        # Entry point utama aplikasi (Home: LoginPage)
+│   └── sidemenu.dart    # Komponen Drawer navigasi (Home & About)
 ├── docs/
-│   └── screenshots/           # Tangkapan layar hasil eksekusi semua latihan
-└── pubspec.yaml               # Metadata & dependensi Flutter
+│   └── screenshots_modul3/ # Bukti tangkapan layar eksekusi Modul 3
+└── pubspec.yaml         # Menambahkan dependencies shared_preferences
 ```
 
 ---
 
-### 🔍 Penjelasan Detail Kode Tiap File (Modul 2)
+### 🔍 Penjelasan Detail Kode Tiap File (Modul 3)
 
-#### 1. Hello World (`lib/hello_world.dart`)
-- **Tujuan**: Memahami struktur paling mendasar dari sebuah `StatelessWidget`.
-- **Komponen Utama**:
-  - `Scaffold`: Kerangka dasar antarmuka berstandar Material Design.
-  - `AppBar`: Bilah header bagian atas dengan judul *"Belajar Flutter"*.
-  - `Center`: Widget perata posisi yang memastikan teks berada tepat di tengah layar.
-  - `Text`: Widget penampil teks statis *"Hello World"*.
+#### 1. Konfigurasi Dependensi (`pubspec.yaml`)
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.6
+```
+- Menambahkan library `shared_preferences` untuk membaca dan menulis data persisten sederhana berbasis pasangan *key-value* di penyimpanan lokal perangkat.
 
-#### 2. Column Widget (`lib/column_widget.dart`)
-- **Tujuan**: Mempelajari pengaturan tata letak vertikal.
-- **Komponen Utama**:
-  - `Column`: Menampung sekumpulan widget anak (`children`) dan menyusunnya dari atas ke bawah secara berurutan (*Kolom 1, Kolom 2, Kolom 3, Kolom 4*).
+#### 2. Halaman Login (`lib/login_page.dart`)
+- **Fungsi**: Titik awal antarmuka pengguna untuk proses autentikasi.
+- **Komponen & Logika**:
+  - `_usernameController` & `_passwordController`: Mengambil teks dari form input username dan password.
+  - Method `_saveUsername()`: Menyimpan username ke local storage melalui `SharedPreferences.getInstance()` dan `prefs.setString('username', ...)`.
+  - Method `_showInput()`: Fungsi modular untuk merender `TextField` dengan parameter controller, placeholder, dan opsi `obscureText` untuk keamanan kata sandi.
+  - Method `_showDialog()`: Menampilkan jendela dialog konfirmasi status login via `AlertDialog` dan `Navigator.push`.
+  - **Validasi Kredensial**:
+    ```dart
+    if (_usernameController.text == 'admin' && _passwordController.text == 'admin') {
+      _saveUsername();
+      _showDialog('Anda Berhasil Login', const HomePage());
+    } else {
+      _showDialog('Username dan Password Salah', const LoginPage());
+    }
+    ```
 
-#### 3. Row Widget (`lib/row_widget.dart`)
-- **Tujuan**: Mempelajari pengaturan tata letak horizontal.
-- **Komponen Utama**:
-  - `Row`: Menampung sekumpulan widget anak (`children`) dan menyusunnya dari kiri ke kanan (*Row 1, Row 2, Row 3, Row 4*).
+#### 3. Halaman Home (`lib/home_page.dart`)
+- **Fungsi**: Halaman utama yang diakses setelah pengguna berhasil login.
+- **Komponen & Logika**:
+  - Method `_loadUsername()`: Mengambil string username yang sebelumnya telah tersimpan di SharedPreferences (`prefs.getString('username')`) dan memperbarui state dengan `setState()`.
+  - Menampilkan salam penyambutan: *"Ini adalah halaman User admin"*.
+  - Menghubungkan menu samping laci melalui properti `drawer: const Sidemenu()`.
 
-#### 4. Form Produk (`lib/ui/produk_form.dart`)
-- **Tujuan**: Menangani masukan (*input handling*) dari pengguna secara interaktif.
-- **Komponen Utama**:
-  - `StatefulWidget`: Digunakan karena halaman memiliki state dinamis (isi input form yang berubah sewaktu-waktu).
-  - `TextEditingController`: Tiga objek controller (`_kodeProdukController`, `_namaProdukController`, `_hargaProdukController`) untuk membaca nilai masukan teks serta membersihkan memori di `dispose()`.
-  - `TextField`: Input box dengan dekorasi label *Kode Produk*, *Nama Produk*, dan *Harga*.
-  - `ElevatedButton`: Tombol *"Simpan"* dengan callback `onPressed`:
-    - Mengambil nilai input teks dari ketiga controller.
-    - Mengonversi teks harga ke integer melalui `int.tryParse()`.
-    - Melakukan navigasi layar via `Navigator.of(context).push(...)` menuju halaman `ProdukDetail` sembari mentransfer data.
+#### 4. Side Menu / Drawer (`lib/sidemenu.dart`)
+- **Fungsi**: Bilah menu samping yang dapat ditarik (*drawer navigation*).
+- **Komponen & Logika**:
+  - `Drawer` membungkus `ListView` untuk susunan item menu yang dapat digulir.
+  - `DrawerHeader`: Menampilkan header bertuliskan *"Sidemenu"*.
+  - `ListTile` Menu **Home**: Menampilkan ikon rumah (`Icons.home`) dan mengarahkan pengguna ke `HomePage()`.
+  - `ListTile` Menu **About**: Menampilkan ikon info (`Icons.info`) dan mengarahkan pengguna ke `AboutPage()`.
 
-#### 5. Detail Produk (`lib/ui/produk_detail.dart`)
-- **Tujuan**: Memahami pengiriman data antar halaman (*passing parameters*).
-- **Komponen Utama**:
-  - Konstruktor berparameter: Menerima `kodeProduk`, `namaProduk`, dan `harga`.
-  - `Column`: Menampilkan kembali data yang telah dikirimkan dari form produk sebelumnya dengan interpolasi string.
+#### 5. Halaman About (`lib/about_page.dart`)
+- **Fungsi**: Halaman informasi pelengkap aplikasi.
+- **Komponen & Logika**:
+  - Menggunakan `StatelessWidget` dengan judul AppBar *"About Page"*.
+  - Memiliki teks *"Ini adalah halaman About"* di tengah layar.
+  - Dilengkapi `drawer: const Sidemenu()` agar pengguna dapat kembali bernavigasi ke halaman Home kapan saja.
 
-#### 6. List Data Produk (`lib/ui/produk_page.dart`)
-- **Tujuan**: Menampilkan data kolektif dalam bentuk daftar yang rapi dan dapat digulir (*scrollable*).
-- **Komponen Utama**:
-  - `ListView`: Komponen daftar bergulir.
-  - `Card`: Membungkus tiap item dalam kartu Material dengan elevasi dan bayangan visual.
-  - `ListTile`: Format baku item daftar yang memiliki `title` (nama barang seperti *Kulkas*, *Playstation*, *Radio*) dan `subtitle` (harga barang *30000*).
-
-#### 7. Main Entry Point (`lib/main.dart`)
-- **Tujuan**: Titik masuk utama aplikasi saat pertama kali dijalankan.
-- **Komponen Utama**:
-  - `void main() => runApp(const MyApp())`: Menjalankan aplikasi Flutter.
-  - `MaterialApp`: Mengonfigurasi judul aplikasi, tema warna Material 2 dengan AppBar biru konsisten sesuai modul, serta menetapkan `home: const ProdukPage()` sebagai halaman awal.
+#### 6. Entry Point (`lib/main.dart`)
+- Mengarahkan alur awal aplikasi ke halaman autentikasi:
+  ```dart
+  MaterialApp(
+    title: 'Flutter Menu',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+      useMaterial3: false,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+    ),
+    home: const LoginPage(),
+  )
+  ```
 
 ---
 
-### 📸 Galeri Tangkapan Layar Tampilan Aplikasi (Modul 2)
+### 📸 Galeri Tangkapan Layar Tampilan Aplikasi (Modul 3)
 
 Seluruh tangkapan layar di bawah ini diambil secara langsung dari **Android Emulator (Pixel / sdk gphone16k)**:
 
-| No | Latihan / Fitur | File Sumber | Tangkapan Layar Emulator |
+| No | Fitur / Halaman | File Sumber | Tangkapan Layar Emulator |
 | :---: | :--- | :--- | :---: |
-| 1 | **Hello World** | [`belajar/lib/hello_world.dart`](belajar/lib/hello_world.dart) | <img src="docs/screenshots/01_hello_world.png" width="280"/> |
-| 2 | **Widget Column** | [`belajar/lib/column_widget.dart`](belajar/lib/column_widget.dart) | <img src="docs/screenshots/02_column_widget.png" width="280"/> |
-| 3 | **Widget Row** | [`belajar/lib/row_widget.dart`](belajar/lib/row_widget.dart) | <img src="docs/screenshots/03_row_widget.png" width="280"/> |
-| 4 | **Form Input Produk** | [`belajar/lib/ui/produk_form.dart`](belajar/lib/ui/produk_form.dart) | <img src="docs/screenshots/04_produk_form.png" width="280"/> |
-| 5 | **Detail Produk (Data Passing)** | [`belajar/lib/ui/produk_detail.dart`](belajar/lib/ui/produk_detail.dart) | <img src="docs/screenshots/05_produk_detail.png" width="280"/> |
-| 6 | **List Data Produk (ListView)** | [`belajar/lib/ui/produk_page.dart`](belajar/lib/ui/produk_page.dart) | <img src="docs/screenshots/06_produk_page.png" width="280"/> |
+| 1 | **Halaman Login** | [`belajar/lib/login_page.dart`](belajar/lib/login_page.dart) | <img src="docs/screenshots_modul3/01_login_page.png" width="260"/> |
+| 2 | **Alert Login Berhasil** | [`belajar/lib/login_page.dart`](belajar/lib/login_page.dart) | <img src="docs/screenshots_modul3/02_login_berhasil_dialog.png" width="260"/> |
+| 3 | **Alert Login Gagal** | [`belajar/lib/login_page.dart`](belajar/lib/login_page.dart) | <img src="docs/screenshots_modul3/03_login_gagal_dialog.png" width="260"/> |
+| 4 | **Halaman Home Page (Load Local Storage)** | [`belajar/lib/home_page.dart`](belajar/lib/home_page.dart) | <img src="docs/screenshots_modul3/04_home_page.png" width="260"/> |
+| 5 | **Side Menu / Drawer Terbuka** | [`belajar/lib/sidemenu.dart`](belajar/lib/sidemenu.dart) | <img src="docs/screenshots_modul3/05_sidemenu_drawer.png" width="260"/> |
+| 6 | **Halaman About Page** | [`belajar/lib/about_page.dart`](belajar/lib/about_page.dart) | <img src="docs/screenshots_modul3/06_about_page.png" width="260"/> |
 
 ---
 
 ## 🚀 Panduan Menjalankan Proyek
 
-### 1. Menjalankan Program Modul 1 (Dart)
+### 1. Menjalankan Modul 1 (Dart Queue)
 ```bash
 dart run queue.dart
 ```
 
-### 2. Menjalankan Aplikasi Modul 2 (Flutter)
+### 2. Menjalankan Aplikasi Modul 2 & 3 (Flutter)
 1. Buka folder proyek Flutter:
    ```bash
    cd belajar
    ```
-2. Pastikan emulator atau perangkat Android terhubung:
+2. Pastikan emulator atau ponsel Android terdeteksi:
    ```bash
    flutter devices
    ```
-3. Jalankan aplikasi:
+3. Unduh dependensi:
+   ```bash
+   flutter pub get
+   ```
+4. Jalankan aplikasi:
    ```bash
    flutter run
    ```
+5. **Kredensial Login**:
+   - **Username**: `admin`
+   - **Password**: `admin`
 
 ---
 
@@ -207,21 +239,17 @@ Jika Anda ingin memperbarui atau mengambil ulang screenshot tampilan secara manu
 1. **Menggunakan Emulator Android Studio**:
    - Jalankan aplikasi di emulator.
    - Klik ikon **Kamera (Take Screenshot)** pada bilah alat emulator di sebelah kanan.
-   - Simpan gambar ke folder `docs/screenshots/` dengan nama file yang sesuai:
-     - `01_hello_world.png`
-     - `02_column_widget.png`
-     - `03_row_widget.png`
-     - `04_produk_form.png`
-     - `05_produk_detail.png`
-     - `06_produk_page.png`
+   - Simpan gambar ke folder target:
+     - Modul 2: `docs/screenshots/`
+     - Modul 3: `docs/screenshots_modul3/`
 
 2. **Menggunakan Terminal ADB**:
-   - Jalankan perintah berikut di command prompt / terminal:
-     ```bash
-     adb exec-out screencap -p > docs/screenshots/06_produk_page.png
-     ```
+   ```bash
+   # Contoh mengambil screenshot halaman login:
+   adb exec-out screencap -p > docs/screenshots_modul3/01_login_page.png
+   ```
 
 3. **Format Markdown untuk Menampilkan Gambar**:
    ```markdown
-   <img src="docs/screenshots/nama_file.png" width="280"/>
+   <img src="docs/screenshots_modul3/nama_file.png" width="260"/>
    ```
